@@ -14,27 +14,35 @@ const Button = props => {
     )
 }
 
-const FeedbackResults = ({ good, neutral, bad, all, average, positive }) => {
+const Statistics = ({ good, neutral, bad, all, average, positive }) => {
 
     if (all > 0) {
         return (
             <div>
                 <Titles title="statistics" />
-                good {good} <br />
-                neutral {neutral} <br />
-                bad {bad} <br />
-                all {all} <br />
-                average {isNaN(average) ? 0 : average} <br />
-                positive {isNaN(positive) ? 0 : positive} %
+                <Statistic text="good" value={good} /> <br />
+                <Statistic text="neutral" value={neutral} /> <br />
+                <Statistic text="bad" value={bad} /> <br />
+                <Statistic text="all" value={all} /> <br />
+                <Statistic text="average" value={isNaN(average) ? 0 : average} /> <br />
+                <Statistic text="positive" value={isNaN(positive) ? 0 : positive} />
         </div>
         )
     } else {
         return (
             <p>
                 No feedback given
-        </p>
+            </p>
         )
     }
+}
+
+const Statistic = ({ text, value }) => {
+    return (
+        <>
+            {text} {value}
+        </>
+    )
 }
 
 const App = () => {
@@ -69,7 +77,7 @@ const App = () => {
                 <Button saveFeedback={saveFeedback('NEUTRAL')} text={'neutral'} />
                 <Button saveFeedback={saveFeedback('BAD')} text={'bad'} />
             </div>
-            <FeedbackResults good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
+            <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
 
         </Fragment >
     )
