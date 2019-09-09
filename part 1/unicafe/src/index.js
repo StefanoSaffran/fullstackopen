@@ -1,16 +1,16 @@
 import React, { Fragment, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-const Titles = props => {
+const Titles = ({ title }) => {
     return (
-        <h1>{props.title}</h1>
+        <h1>{title}</h1>
 
     )
 }
 
-const Button = props => {
+const Button = ({ saveFeedback, text }) => {
     return (
-        <button onClick={props.saveFeedback}>{props.text}</button>
+        <button onClick={saveFeedback}>{text}</button>
     )
 }
 
@@ -19,14 +19,43 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
     if (all > 0) {
         return (
             <div>
-                <Titles title="statistics" />
+      {/*           
                 <Statistic text="good" value={good} /> <br />
                 <Statistic text="neutral" value={neutral} /> <br />
                 <Statistic text="bad" value={bad} /> <br />
                 <Statistic text="all" value={all} /> <br />
                 <Statistic text="average" value={isNaN(average) ? 0 : average} /> <br />
-                <Statistic text="positive" value={isNaN(positive) ? 0 : positive} />
-        </div>
+                <Statistic text="positive" value={isNaN(positive) ? 0 : positive} /> */}
+                <Titles title="statistics" />
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>good</td>
+                            <td>{good}</td>
+                        </tr>
+                        <tr>
+                            <td>neutral</td>
+                            <td>{neutral}</td>
+                        </tr>
+                        <tr>
+                            <td>bad</td>
+                            <td>{bad}</td>
+                        </tr>
+                        <tr>
+                            <td>all</td>
+                            <td>{all}</td>
+                        </tr>
+                        <tr>
+                            <td>average</td>
+                            <td>{average}</td>
+                        </tr>
+                        <tr>
+                            <td>positive</td>
+                            <td>{positive}</td>
+                        </tr>                      
+                    </tbody>
+                </table>
+            </div>
         )
     } else {
         return (
@@ -37,13 +66,13 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
     }
 }
 
-const Statistic = ({ text, value }) => {
+/* const Statistic = ({ text, value }) => {
     return (
         <>
             {text} {value}
         </>
     )
-}
+} */
 
 const App = () => {
     // save clicks of each button to own state
@@ -69,14 +98,18 @@ const App = () => {
     const all = good + neutral + bad;
     const average = (good - bad) / all;
     const positive = (good * 100) / all;
+
     return (
         <Fragment>
+
             <Titles title="give feedback" />
-            <div>
+
+            <>
                 <Button saveFeedback={saveFeedback('GOOD')} text={'good'} />
                 <Button saveFeedback={saveFeedback('NEUTRAL')} text={'neutral'} />
                 <Button saveFeedback={saveFeedback('BAD')} text={'bad'} />
-            </div>
+            </>
+
             <Statistics good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive} />
 
         </Fragment >
