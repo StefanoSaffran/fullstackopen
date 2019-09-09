@@ -27,6 +27,7 @@ const Statistics = ({ good, neutral, bad, all, average, positive }) => {
                 <Statistic text="average" value={isNaN(average) ? 0 : average} /> <br />
                 <Statistic text="positive" value={isNaN(positive) ? 0 : positive} /> */}
                 <Titles title="statistics" />
+                
                 <table>
                     <tbody>
                         <tr>
