@@ -14,13 +14,17 @@ const Button = props => {
     )
 }
 
-const FeedbackResults = props => {
+const FeedbackResults = ({ good, neutral, bad, all, average, positive }) => {
+    
     return (
         <div>
             <Titles title="statistics" />
-            good {props.good} <br />
-            neutral {props.neutral} <br />
-            bad {props.bad}
+            good {good} <br />
+            neutral {neutral} <br />
+            bad {bad} <br />
+            all {all} <br />
+            average {isNaN(average) ? 0 : average} <br />
+            positive {isNaN(positive) ? 0 : positive} %
         </div>
     )
 }
@@ -46,7 +50,9 @@ const App = () => {
                 break;
         }
     }
-
+    const all = good+neutral+bad;
+    const average = (good - bad)/all;
+    const positive = (good*100)/all;
     return (
         <Fragment>
             <Titles title="give feedback" />
@@ -55,7 +61,7 @@ const App = () => {
                 <Button saveFeedback={saveFeedback('NEUTRAL')} text={'neutral'} />
                 <Button saveFeedback={saveFeedback('BAD')} text={'bad'} />
             </div>
-            <FeedbackResults good={good} neutral={neutral} bad={bad} />
+            <FeedbackResults good={good} neutral={neutral} bad={bad} all={all} average={average} positive={positive}/>
 
         </Fragment >
     )
