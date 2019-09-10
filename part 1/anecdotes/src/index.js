@@ -1,6 +1,12 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
+const Title = props => {
+    return (
+        <h1>{props.title}</h1>
+    );
+}
+
 const App = (props) => {
 
     const [selected, setSelected] = useState(0)
@@ -15,14 +21,22 @@ const App = (props) => {
         votes[selected] += 1;
         setVotes([...votes])
     }
-        
+    //let indexOfMaxValue = votes.reduce((iMax, x, i, votes) => x > votes[iMax] ? i : iMax, 0);
+    let temp = votes.indexOf(Math.max(...votes));
+
+    let indexOfMostVoted;
+    temp === undefined ? indexOfMostVoted = 0 : indexOfMostVoted = temp;
 
     return (
         <div>
+            <Title title={"Anecdote of the day"}/>
             {props.anecdotes[selected]} <br />
             has {votes[selected]} votes<br />
             <button onClick={vote}>vote</button>
             <button onClick={() => sortAnecdotes(props.anecdotes.length)}>next anecdote</button>
+            <Title title={"Anecdote with most votes"}/>
+            {props.anecdotes[indexOfMostVoted]} <br />
+            has {votes[indexOfMostVoted]} votes<br />
         </div>
     )
 }
