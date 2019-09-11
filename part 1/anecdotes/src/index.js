@@ -18,8 +18,9 @@ const App = (props) => {
         setSelected(numSelected);
     }
     const vote = () => {
-        votes[selected] += 1;
-        setVotes([...votes])
+        const copy = votes;
+        copy[selected] += 1;
+        setVotes([...copy])
     }
     //let indexOfMaxValue = votes.reduce((iMax, x, i, votes) => x > votes[iMax] ? i : iMax, 0);
     let temp = votes.indexOf(Math.max(...votes));
