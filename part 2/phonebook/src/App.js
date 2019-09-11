@@ -4,24 +4,28 @@ import './App.css';
 const Person = ({ person }) => {
   return (
     <>
-      {person.name} <br/>
+      {person.name} <br />
     </>
   );
 };
 
 
 const App = () => {
-  const [ persons, setPersons] = useState([
+  const [persons, setPersons] = useState([
     { name: 'Arto Hellas' }
-  ]) 
-  const [ newName, setNewName ] = useState('')
+  ])
+  const [newName, setNewName] = useState('')
 
   const addNumber = event => {
     event.preventDefault();
     const personObject = {
       name: newName
     }
-    setPersons(persons.concat(personObject));
+
+    persons.some(p => p.name === newName)
+      ? alert(`${newName} is already added to phonebook`)
+      : setPersons(persons.concat(personObject));
+
     setNewName('');
   }
 
@@ -29,13 +33,13 @@ const App = () => {
     setNewName(event.target.value)
   }
 
-  const rows = persons.map(person => <Person key={person.name} person={person}/>);
+  const rows = persons.map(person => <Person key={person.name} person={person} />);
   return (
     <div>
       <h2>Phonebook</h2>
       <form onSubmit={addNumber}>
         <div>
-          name: <input value={newName} onChange={handleNewName}/>
+          name: <input value={newName} onChange={handleNewName} />
         </div>
         <div>
           <button type="submit" >add</button>
