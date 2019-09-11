@@ -4,7 +4,7 @@ import './App.css';
 const Person = ({ person }) => {
   return (
     <>
-      {person.name} <br />
+      {person.name} {person.number}<br />
     </>
   );
 };
@@ -12,14 +12,19 @@ const Person = ({ person }) => {
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { 
+      name: 'Arto Hellas',
+      number: '040-1234567'
+    }
   ])
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
-  const addNumber = event => {
+  const addContact = event => {
     event.preventDefault();
     const personObject = {
-      name: newName
+      name: newName,
+      number: newNumber
     }
 
     persons.some(p => p.name === newName)
@@ -27,19 +32,27 @@ const App = () => {
       : setPersons(persons.concat(personObject));
 
     setNewName('');
+    setNewNumber('');
   }
 
   const handleNewName = event => {
     setNewName(event.target.value)
   }
 
+  const handleNewNumber = event => {
+    setNewNumber(event.target.value)
+  }
+
   const rows = persons.map(person => <Person key={person.name} person={person} />);
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addNumber}>
+      <form onSubmit={addContact}>
         <div>
           name: <input value={newName} onChange={handleNewName} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNewNumber}/>
         </div>
         <div>
           <button type="submit" >add</button>
