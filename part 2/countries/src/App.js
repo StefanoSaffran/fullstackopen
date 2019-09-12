@@ -14,9 +14,14 @@ const App = () => {
       .then(res => setCountries(res.data))
   }, [])
 
-
   const handleFilter = event => {
     setFilter(event.target.value);
+  }
+
+  const handleClick = country => {
+
+    setFilter(country.name);
+
   }
 
   let filteredCountries = filter ?
@@ -26,24 +31,19 @@ const App = () => {
     })
     : '';
 
-  console.log(filteredCountries)
   if (filteredCountries.length > 10) filteredCountries = 'Too many matches, specify another filter';
   else if (filteredCountries.length > 1) filteredCountries = filteredCountries.map((country) => {
-    console.log(country);
     return (
       <div key={country.name}>
-        {country.name} <br />
+        {country.name} <button onClick={() => handleClick(country)} >show</button><br />
       </div>
     )
   })
   else if (filteredCountries.length === 1) filteredCountries = filteredCountries.map((country) => <Country key={country.name} country={country} />)
 
-
   return (
     <>
-      <div>
-        find countries <input onChange={handleFilter} />
-      </div>
+      find countries <input onChange={handleFilter} />
       {filteredCountries}
     </>
   );
