@@ -26,7 +26,7 @@ const App = () => {
     }
 
     persons.some(p => p.name === newName)
-      ? alert(`${newName} is already added to phonebook`)
+      ? updateContact( personObject)
       : Service.addContact(personObject)
           .then(setPersons(persons.concat(personObject)))
           .catch(err => console.log(err))
@@ -35,12 +35,23 @@ const App = () => {
     setNewNumber('');
   }
 
+  const updateContact = (personObject) => {
+    const result = window.confirm(`${personObject.name} is already added to phonebook, replace the old number with a new one?`);
+
+    const id = persons.filter(p => p.name === newName).map(p => p.id);
+
+    result
+      ? Service.updateContact(id, personObject)
+          .then(returnedPerson => setPersons(persons.map(person => person.id !== returnedPerson.id ? person : returnedPerson)))
+      : alert("The contact was not updated")
+  }
+
   const deleteContact = person => {
     const result = window.confirm(`Delete ${person.name} ?`);
 
     result 
       ? Service.deleteContact(person.id)
-        .then(deletedContact => {
+        .then(res => {
           setPersons(persons.filter(p => p.id !== person.id))
         })
       : alert("The contact was not deleted") 

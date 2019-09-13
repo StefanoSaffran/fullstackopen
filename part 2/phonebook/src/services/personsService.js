@@ -12,7 +12,10 @@ const Service = {
             .post(baseUrl, person)
             .then(res => res.data),
 
-    updateContact: () => '',
+    updateContact: (id, person) => 
+        axios
+            .put(`${baseUrl}/${id}`, person)
+            .then(res => res.data),
 
     deleteContact: id => 
         axios
