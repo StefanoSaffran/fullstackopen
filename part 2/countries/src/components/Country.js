@@ -6,7 +6,7 @@ const Country = props => {
     const { name } = props.country;
 
     useEffect(() => {
-        console.log(name);
+
         const params = {
             access_key: '94aa904bba935c41840e63f6cb54d157',
             query: name
@@ -17,8 +17,6 @@ const Country = props => {
             .then(res => setWeather(res.data))
             .catch(err => console.log(err));
     }, []);
-
-    console.log(weather);
 
     const temp =
         weather.length !== 0 ?
