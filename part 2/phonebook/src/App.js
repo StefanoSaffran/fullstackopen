@@ -16,7 +16,7 @@ const App = () => {
     Service.getAll()
       .then(allContacts => setPersons(allContacts))
       .catch(err => console.log(err))
-  })
+  },[])
 
   const addContact = event => {
     event.preventDefault();
@@ -33,6 +33,17 @@ const App = () => {
 
     setNewName('');
     setNewNumber('');
+  }
+
+  const deleteContact = person => {
+    const result = window.confirm(`Delete ${person.name} ?`);
+
+    result 
+      ? Service.deleteContact(person.id)
+        .then(deletedContact => {
+          setPersons(persons.filter(p => p.id !== person.id))
+        })
+      : alert("The contact was not deleted") 
   }
 
   const handleNewName = event => {
@@ -62,7 +73,7 @@ const App = () => {
       <h2>add a new</h2>
       <PersonForm name={newName} number={newNumber} handleNewName={handleNewName} handleNewNumber={handleNewNumber} addContact={addContact}/>
       <h2>Numbers</h2>
-      <Persons personsToShow={personsToShow}/>
+      <Persons personsToShow={personsToShow} deleteContact={deleteContact}/>
     </div>
   )
 }
