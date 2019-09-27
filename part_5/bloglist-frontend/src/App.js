@@ -4,9 +4,10 @@ import './App.css';
 import Notification from './components/Notification';
 import Blog from './components/Blog';
 import BlogForm from './components/forms/BlogForm'
+import LoginForm from './components/forms/LoginForm'
+import Togglable from './components/Togglable';
 import blogsService from './services/blogs';
 import loginService from './services/login';
-import { async } from 'q';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -14,7 +15,9 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
-  const [newBlog, setNewBlog] = useState([])
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
 
@@ -67,7 +70,8 @@ const App = () => {
     }
   }
 
-  const addBlog = async (title, author, url) => {
+  const handleBlogSubmit = async event => {
+    event.preventDefault();
 
     const blogObject = {
       title,
@@ -75,14 +79,13 @@ const App = () => {
       url
     }
 
-    setNewBlog(blogObject);
     try {
       const savedBlog = await blogsService.addBlog(blogObject)
 
       setBlogs(blogs.concat(savedBlog))
       setInfoMessage(
         {
-          body: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+          body: `a new blog ${savedBlog.title} by ${savedBlog.author} added`,
           type: 'info'
         }
       )
@@ -98,31 +101,20 @@ const App = () => {
 
   }
 
-  const LoginForm = () => (
-    <>
-      <form onSubmit={handleLogin}>
-        <div>
-          username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
-        </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
-    </>
-  )
+  const loginForm = () => {
+
+    return (
+      <Togglable buttonLabel='login'>
+        <LoginForm
+          username={username}
+          password={password}
+          handleUsernameChange={({ target }) => setUsername(target.value)}
+          handlePasswordChange={({ target }) => setPassword(target.value)}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>
+    )
+  }
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -138,7 +130,7 @@ const App = () => {
       <>
         <h2>log in to application</h2>
         <Notification message={infoMessage} />
-        <LoginForm />
+        {loginForm()}
       </>
     )
 
@@ -152,10 +144,18 @@ const App = () => {
         {user.name} logged in <button onClick={logout}>Logout</button>
       </div>
       <h2>create new</h2>
-      <div>
-        <BlogForm addBlog={addBlog} />
-        {rows}
-      </div>
+      <Togglable buttonLabel='new note'>
+        <BlogForm
+          handleBlogSubmit={handleBlogSubmit}
+          title={title}
+          author={author}
+          url={url}
+          handleTitleChange={({ target }) => setTitle(target.value)}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleUrlChange={({ target }) => setUrl(target.value)}
+        />
+      </Togglable>
+      {rows}
     </>
   );
 }
