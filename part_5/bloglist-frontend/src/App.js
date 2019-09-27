@@ -3,6 +3,7 @@ import './App.css';
 
 import Notification from './components/Notification';
 import Blog from './components/Blog';
+import BlogForm from './components/forms/BlogForm'
 import blogsService from './services/blogs';
 import loginService from './services/login';
 
@@ -48,7 +49,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedBlogappUser', JSON.stringify(user)
-      ) 
+      )
       blogsService.setToken(user.token)
       setUser(user);
       setUsername('');
@@ -64,52 +65,68 @@ const App = () => {
     }
   }
 
-  const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
+  const addBlog = (title, author, url, event) => {
+    event.preventDefault();
+    console.log(title, author, url);
+  }
+
+  const LoginForm = () => (
+    <>
+      <form onSubmit={handleLogin}>
+        <div>
+          username
           <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
           <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>
+    </>
   )
 
   const logout = () => {
-    window.localStorage.removeItem('loggedBlogappUser') 
+    window.localStorage.removeItem('loggedBlogappUser')
     setUser(null)
     blogsService.setToken('')
   }
 
   const rows = blogs.map(blog => <Blog key={blog.id} blog={blog} />);
 
+  if (user === null) {
+
+    return (
+      <>
+        <h2>log in to application</h2>
+        <LoginForm />
+      </>
+    )
+
+  }
+
   return (
     <>
       <h1>Blogs</h1>
       <Notification message={infoMessage} />
-      <h2>Login</h2>
-
-      {user === null ?
-        loginForm() :
-        <div>
-          <p>{user.name} logged in</p>
-          {rows}
-          <button onClick={logout}>Logout</button>
-        </div>
-      }
+      <div>
+        {user.name} logged in <button onClick={logout}>Logout</button>
+      </div>
+      <h2>create new</h2>
+      <div>
+        <BlogForm addBlog={addBlog} />
+        {rows}
+      </div>
     </>
   );
 }
