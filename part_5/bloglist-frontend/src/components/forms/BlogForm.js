@@ -5,8 +5,16 @@ const BlogForm = ({ addBlog }) => {
     const [title, setTitle] = useState('');
     const [author, setAuthor] = useState('');
     const [url, setUrl] = useState('');
+
+    const saveBlog = event => {
+        event.preventDefault();
+        setTitle('');
+        setAuthor('');
+        setUrl('');
+        addBlog(title, author, url);
+    }
   return (
-    <form onSubmit={(event) => addBlog(title, author, url, event)}>
+    <form onSubmit={saveBlog}>
       <div>
         title
           <input

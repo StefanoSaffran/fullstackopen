@@ -6,6 +6,7 @@ import Blog from './components/Blog';
 import BlogForm from './components/forms/BlogForm'
 import blogsService from './services/blogs';
 import loginService from './services/login';
+import { async } from 'q';
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,6 +14,7 @@ const App = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [user, setUser] = useState(null);
+  const [newBlog, setNewBlog] = useState([])
 
   useEffect(() => {
 
@@ -58,16 +60,42 @@ const App = () => {
     } catch (err) {
       setInfoMessage(
         {
-          body: 'Wrong credentials',
+          body: 'wrong username or password',
           type: 'error'
         }
       )
     }
   }
 
-  const addBlog = (title, author, url, event) => {
-    event.preventDefault();
-    console.log(title, author, url);
+  const addBlog = async (title, author, url) => {
+
+    const blogObject = {
+      title,
+      author,
+      url
+    }
+
+    setNewBlog(blogObject);
+    try {
+      const savedBlog = await blogsService.addBlog(blogObject)
+
+      setBlogs(blogs.concat(savedBlog))
+      setInfoMessage(
+        {
+          body: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+          type: 'info'
+        }
+      )
+    } catch (err) {
+      setInfoMessage(
+        {
+          body: `${err.response.data.error}`,
+          type: 'error'
+        }
+      )
+      console.log(err.response.data)
+    }
+
   }
 
   const LoginForm = () => (
@@ -109,6 +137,7 @@ const App = () => {
     return (
       <>
         <h2>log in to application</h2>
+        <Notification message={infoMessage} />
         <LoginForm />
       </>
     )

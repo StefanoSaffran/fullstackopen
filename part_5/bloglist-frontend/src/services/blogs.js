@@ -11,6 +11,18 @@ const blogsService = {
     axios
       .get(baseUrl)
       .then(res => res.data)
+  ,
+  
+  addBlog: async newBlog => {
+
+    const config = {
+      headers: { Authorization: token }
+    }
+    const response =
+      await axios
+        .post(baseUrl, newBlog, config)
+        return response.data
+  }
 
 }
 
