@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Blog = ({ blog, handleLikes }) => {
+const Blog = ({ blog, handleLikes, user }) => {
 
   const [visible, setVisible] = useState(false)
 
@@ -30,8 +30,8 @@ const Blog = ({ blog, handleLikes }) => {
         </div>
         {blog.url} <br />
         {blog.likes} likes <button onClick={() => handleLikes(blog)}>like</button> <br />
-        added by {blog.author} <br />
-        <button>remove</button>
+        added by {blog.user.name || user.name} <br />
+        {blog.user.name === user.name && <button>remove</button>}
       </div>
     </div>
   )

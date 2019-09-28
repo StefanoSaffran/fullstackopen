@@ -165,7 +165,7 @@ const App = () => {
  
   const sortedblogs = sortByKey(blogs, 'likes'); 
 
-  const rows = sortedblogs.map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />);
+  const rows = sortedblogs.map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} user={user}/>);
 
   if (user === null) {
 
