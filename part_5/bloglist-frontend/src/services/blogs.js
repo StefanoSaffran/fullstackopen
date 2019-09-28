@@ -12,7 +12,7 @@ const blogsService = {
       .get(baseUrl)
       .then(res => res.data)
   ,
-  
+
   addBlog: async newBlog => {
 
     const config = {
@@ -21,8 +21,13 @@ const blogsService = {
     const response =
       await axios
         .post(baseUrl, newBlog, config)
-        return response.data
-  }
+    return response.data
+  },
+
+  updateBlog: (id, blog) =>
+    axios
+      .put(`${baseUrl}/${id}`, blog)
+      .then(res => res.data)
 
 }
 

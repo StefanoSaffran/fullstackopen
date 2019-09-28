@@ -19,6 +19,8 @@ const App = () => {
   const [author, setAuthor] = useState('');
   const [url, setUrl] = useState('');
 
+  const blogFormRef = React.createRef();
+
   useEffect(() => {
 
     blogsService.getAll()
@@ -72,7 +74,7 @@ const App = () => {
 
   const handleBlogSubmit = async event => {
     event.preventDefault();
-
+    blogFormRef.current.toggleVisibility();
     const blogObject = {
       title,
       author,
@@ -101,6 +103,37 @@ const App = () => {
 
   }
 
+  const handleLikes = blog => {
+
+    const blogToUpdate = { 
+      user: blog.user.id,
+      likes: (blog.likes += 1),
+      author: blog.author,
+      title: blog.title,
+      url: blog.url
+    }
+
+    blogsService.updateBlog(blog.id, blogToUpdate)
+        .then(updatedBlog => {
+          setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
+          setInfoMessage(
+            {
+              body: `${user.name} liked the blog post ${updatedBlog.title}`,
+              type: 'info'
+            }
+          )
+        })
+        .catch(err => {
+          setInfoMessage(
+            {
+              body: `${err.response.data.error}`,
+              type: 'error'
+            }
+          )
+          console.log(err.response.data)
+        })
+  }
+
   const loginForm = () => {
 
     return (
@@ -121,8 +154,18 @@ const App = () => {
     setUser(null)
     blogsService.setToken('')
   }
+  
+  const sortByKey = (blogs, key) => {
+    
+    return blogs.sort((a,b) => {
+      let x = b[key]; let y = a[key];
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    })
+  }
+ 
+  const sortedblogs = sortByKey(blogs, 'likes'); 
 
-  const rows = blogs.map(blog => <Blog key={blog.id} blog={blog} />);
+  const rows = sortedblogs.map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} />);
 
   if (user === null) {
 
@@ -133,7 +176,6 @@ const App = () => {
         {loginForm()}
       </>
     )
-
   }
 
   return (
@@ -144,7 +186,7 @@ const App = () => {
         {user.name} logged in <button onClick={logout}>Logout</button>
       </div>
       <h2>create new</h2>
-      <Togglable buttonLabel='new note'>
+      <Togglable buttonLabel='new note' ref={blogFormRef}>
         <BlogForm
           handleBlogSubmit={handleBlogSubmit}
           title={title}
