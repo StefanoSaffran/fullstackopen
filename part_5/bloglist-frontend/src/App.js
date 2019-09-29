@@ -105,7 +105,7 @@ const App = () => {
 
   const handleLikes = blog => {
 
-    const blogToUpdate = { 
+    const blogToUpdate = {
       user: blog.user.id,
       likes: (blog.likes += 1),
       author: blog.author,
@@ -114,24 +114,52 @@ const App = () => {
     }
 
     blogsService.updateBlog(blog.id, blogToUpdate)
-        .then(updatedBlog => {
-          setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
-          setInfoMessage(
-            {
-              body: `${user.name} liked the blog post ${updatedBlog.title}`,
-              type: 'info'
-            }
-          )
-        })
-        .catch(err => {
-          setInfoMessage(
-            {
-              body: `${err.response.data.error}`,
-              type: 'error'
-            }
-          )
-          console.log(err.response.data)
-        })
+      .then(updatedBlog => {
+        setBlogs(blogs.map(blog => blog.id !== updatedBlog.id ? blog : updatedBlog))
+        setInfoMessage(
+          {
+            body: `${user.name} liked the blog post ${updatedBlog.title}`,
+            type: 'info'
+          }
+        )
+      })
+      .catch(err => {
+        setInfoMessage(
+          {
+            body: `${err.response.data.error}`,
+            type: 'error'
+          }
+        )
+        console.log(err.response.data)
+      })
+  }
+
+  const handleDelete = async blog => {
+    const result = window.confirm(`remove blog ${blog.title} by ${blog.author} ?`);
+
+    if (result) {
+
+      try {
+        const blogIdToDelete = blog.id;
+        await blogsService.deleteBlog(blogIdToDelete)
+
+        setBlogs(blogs.filter(blog => blog.id !== blogIdToDelete))
+        setInfoMessage(
+          {
+            body: `the blog has been renoved from server`,
+            type: 'info'
+          }
+        )
+      } catch (err) {
+        setInfoMessage(
+          {
+            body: `${err.response.data.error}`,
+            type: 'error'
+          }
+        )
+        console.log(err.response.data)
+      }
+    }
   }
 
   const loginForm = () => {
@@ -154,18 +182,18 @@ const App = () => {
     setUser(null)
     blogsService.setToken('')
   }
-  
+
   const sortByKey = (blogs, key) => {
-    
-    return blogs.sort((a,b) => {
+
+    return blogs.sort((a, b) => {
       let x = b[key]; let y = a[key];
       return ((x < y) ? -1 : ((x > y) ? 1 : 0));
     })
   }
- 
-  const sortedblogs = sortByKey(blogs, 'likes'); 
 
-  const rows = sortedblogs.map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} user={user}/>);
+  const sortedblogs = sortByKey(blogs, 'likes');
+
+  const rows = sortedblogs.map(blog => <Blog key={blog.id} blog={blog} handleLikes={handleLikes} handleDelete={handleDelete} user={user} />);
 
   if (user === null) {
 
