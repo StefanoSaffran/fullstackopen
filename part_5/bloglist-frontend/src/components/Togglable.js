@@ -20,7 +20,7 @@ const Togglable = React.forwardRef((props, ref) => {
   Togglable.propTypes = {
     buttonLabel: PropTypes.string.isRequired
   }
-  
+
   return (
     <div>
       <div style={hideWhenVisible}>

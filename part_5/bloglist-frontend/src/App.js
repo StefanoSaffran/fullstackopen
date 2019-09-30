@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import './App.css'
 
-import Notification from './components/Notification';
-import Blog from './components/Blog';
+import Notification from './components/Notification'
+import Blog from './components/Blog'
 import BlogForm from './components/forms/BlogForm'
 import LoginForm from './components/forms/LoginForm'
-import Togglable from './components/Togglable';
-import blogsService from './services/blogs';
-import loginService from './services/login';
+import Togglable from './components/Togglable'
+import blogsService from './services/blogs'
+import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -146,7 +146,7 @@ const App = () => {
         setBlogs(blogs.filter(blog => blog.id !== blogIdToDelete))
         setInfoMessage(
           {
-            body: `the blog has been renoved from server`,
+            body: 'the blog has been renoved from server',
             type: 'info'
           }
         )

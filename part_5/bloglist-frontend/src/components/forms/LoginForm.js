@@ -10,7 +10,7 @@ const LoginForm = ({ handleSubmit, handleUsernameChange, handlePasswordChange, u
     username: PropTypes.string.isRequired,
     password: PropTypes.string.isRequired
   }
-  
+
   return (
     <div>
       <h2>Login</h2>
