@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import './App.css'
 
+import { useField } from './hooks'
 import Notification from './components/Notification'
 import Blog from './components/Blog'
 import BlogForm from './components/forms/BlogForm'
@@ -12,12 +13,17 @@ import loginService from './services/login'
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [infoMessage, setInfoMessage] = useState(null);
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { reset: resetName, ...username } = useField('text')
+  const { reset: resetPass, ...password } = useField('password')
+  const { reset: resetTitle, ...title } = useField('text')
+  const { reset: resetAuthor, ...author } = useField('text')
+  const { reset: resetUrl, ...url } = useField('text')
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
-  const [url, setUrl] = useState('');
+  //const [username, setUsername] = useState('');
+  //const [password, setPassword] = useState('');
+  //const [title, setTitle] = useState('');
+  //const [author, setAuthor] = useState('');
+  //const [url, setUrl] = useState('');
 
   const blogFormRef = React.createRef();
 
@@ -51,7 +57,8 @@ const App = () => {
 
     try {
       const user = await loginService.login({
-        username, password,
+        username: username.value,
+        password: password.value
       })
 
       window.localStorage.setItem(
@@ -59,8 +66,10 @@ const App = () => {
       )
       blogsService.setToken(user.token)
       setUser(user);
-      setUsername('');
-      setPassword('');
+      resetName();
+      resetPass();
+      //setUsername('');
+      //setPassword('');
 
     } catch (err) {
       setInfoMessage(
@@ -69,6 +78,8 @@ const App = () => {
           type: 'error'
         }
       )
+      resetName();
+      resetPass();
     }
   }
 
@@ -76,9 +87,9 @@ const App = () => {
     event.preventDefault();
     blogFormRef.current.toggleVisibility();
     const blogObject = {
-      title,
-      author,
-      url
+      title: title.value,
+      author: author.value,
+      url: url.value
     }
 
     try {
@@ -91,6 +102,9 @@ const App = () => {
           type: 'info'
         }
       )
+      resetTitle()
+      resetAuthor()
+      resetUrl()
     } catch (err) {
       setInfoMessage(
         {
@@ -98,6 +112,9 @@ const App = () => {
           type: 'error'
         }
       )
+      resetTitle()
+      resetAuthor()
+      resetUrl()
       console.log(err.response.data)
     }
 
@@ -167,10 +184,8 @@ const App = () => {
     return (
       <Togglable buttonLabel='login'>
         <LoginForm
-          username={username}
-          password={password}
-          handleUsernameChange={({ target }) => setUsername(target.value)}
-          handlePasswordChange={({ target }) => setPassword(target.value)}
+          inputName={<input {...username} />}
+          inputPassword={<input {...password} />}
           handleSubmit={handleLogin}
         />
       </Togglable>
@@ -217,12 +232,9 @@ const App = () => {
       <Togglable buttonLabel='new note' ref={blogFormRef}>
         <BlogForm
           handleBlogSubmit={handleBlogSubmit}
-          title={title}
-          author={author}
-          url={url}
-          handleTitleChange={({ target }) => setTitle(target.value)}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlChange={({ target }) => setUrl(target.value)}
+          inputTitle={<input {...title} />}
+          inputAuthor={<input {...author} />}
+          inputUrl={<input {...url} />}
         />
       </Togglable>
       {rows}
