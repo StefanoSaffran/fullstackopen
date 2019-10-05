@@ -1,5 +1,6 @@
 import React from 'react';
 
+import NewAnecdote from './components/NewAnecdote';
 import { addVote } from './reducers/anecdoteReducer';
 
 const App = (props) => {
@@ -10,11 +11,20 @@ const App = (props) => {
       addVote(id)
     );
   }
+  const sortByKey = (blogs, key) => {
+
+    return blogs.sort((a, b) => {
+      let x = b[key]; let y = a[key];
+      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    })
+  }
+
+  const sortedAnecdotes = sortByKey(anecdotes, 'votes');
 
   return (
-    <div>
+    <>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sortedAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -26,11 +36,8 @@ const App = (props) => {
         </div>
       )}
       <h2>create new</h2>
-      <form>
-        <div><input /></div>
-        <button>create</button>
-      </form>
-    </div>
+      <NewAnecdote store={props.store}/>
+    </>
   )
 }
 
