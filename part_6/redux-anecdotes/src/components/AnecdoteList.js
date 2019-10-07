@@ -16,7 +16,7 @@ const AnecdoteList = props => {
   
   return (
     <>
-      {props.filteredAnecdotes.map(anecdote =>
+      {props.anecdotesToShow.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -52,7 +52,7 @@ const anecdotesToShow = ({ anecdotes, filter }) => {
 }
 const mapStateToProps = (state) => {
   return {
-    filteredAnecdotes: anecdotesToShow(state),
+    anecdotesToShow: anecdotesToShow(state),
   }
 }
 
