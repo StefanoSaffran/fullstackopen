@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Notification from './components/Notification';
 import AnecdoteList from './components/AnecdoteList';

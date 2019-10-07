@@ -3,11 +3,12 @@ const initialState =
   message: 'Default notification',
 }
 
-
 const notificationReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SHOW_NOTIFICATION':
-      return action.message
+      return action.data
+    case 'HIDE_NOTIFICATION':
+      return action.data;
     default:
       return state;
   }
@@ -16,7 +17,18 @@ const notificationReducer = (state = initialState, action) => {
 export const show = message => {
   return {
     type: 'SHOW_NOTIFICATION',
-    message
+    data: {
+      message
+    }
+  }
+}
+
+export const hide = message => {
+  return {
+    type: 'HIDE_NOTIFICATION',
+    data: {
+      message,
+    }
   }
 }
 

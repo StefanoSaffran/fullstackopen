@@ -1,14 +1,24 @@
 import React from 'react';
 
 import { addVote } from '../reducers/anecdoteReducer';
+import { show, hide } from '../reducers/notificationReducer';
 
 const AnecdoteList = props => {
   const { anecdotes } = props.store.getState();
 
-  const vote = (id) => {
+  const vote = ({ content, id }) => {
     props.store.dispatch(
-      addVote(id)
+      addVote(id),
     );
+    props.store.dispatch(
+      show(`you voted '${content}'`)
+    );
+
+    setTimeout(() => {
+      props.store.dispatch(
+        hide('')
+      );
+    }, 5000)
   }
   
   const sortByKey = (anecdotes, key) => {
@@ -29,7 +39,7 @@ const AnecdoteList = props => {
           </div>
           <div>
             has {anecdote.votes}
-            <button onClick={() => vote(anecdote.id)}>vote</button>
+            <button onClick={() => vote(anecdote)}>vote</button>
           </div>
         </div>
       )}
