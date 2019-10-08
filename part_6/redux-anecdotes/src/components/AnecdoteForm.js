@@ -3,7 +3,6 @@ import { connect } from 'react-redux'
 
 import { createAnecdote } from '../reducers/anecdoteReducer';
 import { show, hide } from '../reducers/notificationReducer';
-import anecdotesAPI from '../services/api';
 
 const AnecdoteForm = (props) => {
 
@@ -12,27 +11,22 @@ const AnecdoteForm = (props) => {
 
     const content = event.target.anecdote.value
     event.target.anecdote.value = '';
-
-    anecdotesAPI.createNew(content)
-      .then(newAnecdote => {
-        props.createAnecdote(newAnecdote)
-        props.show('New Anecdote added.');
-        setTimeout(() => {
-          props.hide('');
-        }, 5000)
-      })
-    
+    props.createAnecdote(content)
+    props.show('New Anecdote added.');
+    setTimeout(() => {
+      props.hide('');
+    }, 5000)
   }
 
-  return (
-    <>
-      <h2>create new</h2>
-      <form onSubmit={addAnecdote}>
-        <div><input name="anecdote" /></div>
-        <button type="submit">create</button>
-      </form>
-    </>
-  )
+return (
+  <>
+    <h2>create new</h2>
+    <form onSubmit={addAnecdote}>
+      <div><input name="anecdote" /></div>
+      <button type="submit">create</button>
+    </form>
+  </>
+)
 }
 
 const mapDispatchToProps = {

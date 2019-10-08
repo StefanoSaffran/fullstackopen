@@ -4,23 +4,18 @@ import Notification from './components/Notification';
 import AnecdoteList from './components/AnecdoteList';
 import AnecdoteForm from './components/AnecdoteForm';
 import Filter from './components/Filter';
-import anecdotesAPI from './services/api';
 import { initializeAnecdotes } from './reducers/anecdoteReducer';
 
 const App = (props) => {
 
   useEffect(() => {
-    anecdotesAPI
-      .getAll()
-      .then(anecdotes => 
-        props.initializeAnecdotes(anecdotes)
-      )
+    props.initializeAnecdotes()
   }, []);
 
   return (
     <>
       <h2>Anecdotes</h2>
-      <Filter  />
+      <Filter />
       <Notification />
       <AnecdoteList />
       <AnecdoteForm />

@@ -1,3 +1,5 @@
+import anecdotesAPI from '../services/api';
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'INIT_ANECDOTES':
@@ -17,10 +19,15 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const initializeAnecdotes = (anecdotes) => {
-  return {
-    type: 'INIT_ANECDOTES',
-    data: anecdotes,
+export const initializeAnecdotes = () => {
+  return dispatch => {
+    anecdotesAPI.getAll()
+      .then(anecdotes => {
+        dispatch({
+          type: 'INIT_ANECDOTES',
+          data: anecdotes,
+        })
+      })
   }
 }
 
@@ -33,10 +40,15 @@ export const addVote = id => {
   }
 }
 
-export const createAnecdote = data => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data
+export const createAnecdote = content => {
+  return dispatch => {
+    anecdotesAPI.createNew(content)
+      .then(newAnecdote => {
+        dispatch({
+          type: 'NEW_ANECDOTE',
+          data: newAnecdote,
+        })
+      })
   }
 }
 
