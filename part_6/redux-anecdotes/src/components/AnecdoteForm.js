@@ -3,18 +3,25 @@ import { connect } from 'react-redux'
 
 import { createAnecdote } from '../reducers/anecdoteReducer';
 import { show, hide } from '../reducers/notificationReducer';
+import anecdotesAPI from '../services/api';
 
 const AnecdoteForm = (props) => {
 
   const addAnecdote = event => {
     event.preventDefault();
 
-    props.createAnecdote(event.target.anecdote.value);
+    const content = event.target.anecdote.value
     event.target.anecdote.value = '';
-    props.show('New Anecdote added.');
-    setTimeout(() => {
-      props.hide('');
-    }, 5000)
+
+    anecdotesAPI.createNew(content)
+      .then(newAnecdote => {
+        props.createAnecdote(newAnecdote)
+        props.show('New Anecdote added.');
+        setTimeout(() => {
+          props.hide('');
+        }, 5000)
+      })
+    
   }
 
   return (
