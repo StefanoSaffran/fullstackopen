@@ -11,14 +11,11 @@ const createNew = content => {
     content,
     votes: 0
   }
-  axios.post(baseUrl, object)
-    .then(res => {
-      console.log(res);
-      return res.data
-    })
+  return axios.post(baseUrl, object)
+    .then(res => res.data)
 }
 
 export default {
   getAll,
-  createNew,
+  createNew
 }
