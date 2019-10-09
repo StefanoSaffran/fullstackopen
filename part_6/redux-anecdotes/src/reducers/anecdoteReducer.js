@@ -6,12 +6,7 @@ const reducer = (state = [], action) => {
       return action.data
     case 'VOTE':
       const id = action.data.id
-      const anecToChange = state.find(anec => anec.id === id)
-      const changedAnec = {
-        ...anecToChange,
-        votes: anecToChange.votes + 1
-      }
-      return state.map(anec => anec.id !== id ? anec : changedAnec);
+      return state.map(anec => anec.id !== id ? anec : action.data);
     case 'NEW_ANECDOTE':
       return [...state, action.data];
     default:
@@ -31,12 +26,19 @@ export const initializeAnecdotes = () => {
   }
 }
 
-export const addVote = id => {
-  return {
-    type: 'VOTE',
-    data: {
-      id
+export const addVote = anecdote => {
+  return dispatch => {
+    const changedAnec = {
+      ...anecdote,
+      votes: anecdote.votes + 1
     }
+    anecdotesAPI.updateVotes(anecdote.id, changedAnec)
+      .then(votedAnecdote => {
+        dispatch({
+          type: 'VOTE',
+          data: votedAnecdote
+        })
+      })
   }
 }
 
