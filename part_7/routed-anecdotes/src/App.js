@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route, Link, Redirect, withRouter
 } from 'react-router-dom'
 
-const Menu = ({ anecdotes, addNew, anecdoteById }) => {
+import './App.css'
+
+const Menu = ({ message, anecdotes, addNew, anecdoteById }) => {
   const navBar = {
     padding: 5,
     textDecoration: 'none',
@@ -13,6 +15,7 @@ const Menu = ({ anecdotes, addNew, anecdoteById }) => {
     borderRadius: 5,
     borderStyle: 'solid',
     marginRight: 5,
+    marginBotton: 5,
     color: 'black'
   }
 
@@ -26,6 +29,7 @@ const Menu = ({ anecdotes, addNew, anecdoteById }) => {
         <Link to='/create' style={navBar}>create new</Link>
         <Link to='/about' style={navBar}>about</Link>
       </>
+        <br/><br/><Notification message={message}/>
       <>
         <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} anecdotesStyles={anecdotesStyles}/>} />
         <Route path="/anecdotes/:id" render={({ match }) => <Anecdote anecdote={anecdoteById(match.params.id)} />} />
@@ -118,6 +122,21 @@ const CreateNew = (props) => {
 
 }
 
+const Notification = ({ message }) => {
+  let classes = '';
+  if (message === null) {
+    return null
+  } else {
+    classes = `message ${message.type}`
+  }
+
+  return (
+    <div className={classes}>
+      {message.body}
+    </div>
+  );
+};
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -136,11 +155,25 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
+
+  useEffect(() => {
+
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
+
+  }, [notification])
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(
+      {
+        body: `a new anecdote ${anecdote.content} created!`,
+        type: 'info'
+      }
+    )
   }
 
   const anecdoteById = (id) =>
@@ -160,7 +193,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} addNew={addNew} anecdoteById={anecdoteById}/>
+      <Menu message={notification} anecdotes={anecdotes} addNew={addNew} anecdoteById={anecdoteById}/>
       <Footer />
     </div>
   )
