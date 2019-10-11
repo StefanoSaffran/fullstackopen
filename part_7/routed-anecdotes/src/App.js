@@ -4,8 +4,8 @@ import {
   Route, Link, Redirect, withRouter
 } from 'react-router-dom'
 
-const Menu = ({ anecdotes, addNew }) => {
-  const padding = {
+const Menu = ({ anecdotes, addNew, anecdoteById }) => {
+  const navBar = {
     padding: 5,
     textDecoration: 'none',
     borderColor: 'black',
@@ -15,15 +15,20 @@ const Menu = ({ anecdotes, addNew }) => {
     marginRight: 5,
     color: 'black'
   }
+
+  const anecdotesStyles = {
+    textDecoration: 'none'
+  }
   return (
     <Router>
       <>
-        <Link to='/' style={padding}>anecdotes</Link>
-        <Link to='/create' style={padding}>create new</Link>
-        <Link to='/about' style={padding}>about</Link>
+        <Link to='/' style={navBar}>anecdotes</Link>
+        <Link to='/create' style={navBar}>create new</Link>
+        <Link to='/about' style={navBar}>about</Link>
       </>
       <>
-        <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} />} />
+        <Route exact path="/" render={() => <AnecdoteList anecdotes={anecdotes} anecdotesStyles={anecdotesStyles}/>} />
+        <Route path="/anecdotes/:id" render={({ match }) => <Anecdote anecdote={anecdoteById(match.params.id)} />} />
         <Route path="/create" render={() => <CreateNew addNew={addNew} />} />
         <Route path="/about" render={() => <About />} />
       </>
@@ -31,11 +36,23 @@ const Menu = ({ anecdotes, addNew }) => {
   )
 }
 
-const AnecdoteList = ({ anecdotes }) => (
+const Anecdote = ({ anecdote }) => (
+ <>
+  <h1>{anecdote.content}</h1>
+  has {anecdote.votes} votes <br/><br/>
+  for more info see {anecdote.info} <br/><br/>
+ </> 
+)
+
+const AnecdoteList = ({ anecdotes, anecdotesStyles }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => (
+        <li key={anecdote.id} >
+          <Link to={`/anecdotes/${anecdote.id}`} style={anecdotesStyles}>{anecdote.content}</Link>
+        </li>
+      ))}
     </ul>
   </div>
 )
@@ -143,7 +160,7 @@ const App = () => {
   return (
     <div>
       <h1>Software anecdotes</h1>
-      <Menu anecdotes={anecdotes} addNew={addNew}/>
+      <Menu anecdotes={anecdotes} addNew={addNew} anecdoteById={anecdoteById}/>
       <Footer />
     </div>
   )
