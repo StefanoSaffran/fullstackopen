@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { darken } from 'polished';
+import colors from '~/styles/colors';
 
 export const Container = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ export const Container = styled.div`
   div {
     display: flex;
     flex-direction: column;
-    background: rgb(255, 255, 255);
+    background: ${colors.white};
     padding: 15px 5px;
     position: absolute;
     top: 64px;
@@ -25,14 +26,14 @@ export const Container = styled.div`
       'modalFadeIn .3s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards'};
     a {
       font-weight: bold;
-      color: #999;
+      color: ${colors.lightGray};
       font-size: 15px;
       padding: 20px;
       animation: ${props =>
         props.visible &&
         'modalLinksFadeIn .8s cubic-bezier(0.165, 0.840, 0.440, 1.000) forwards'};
       &:hover {
-        color: ${darken(0.3, '#999')};
+        color: ${darken(0.3, `${colors.lightGray}`)};
       }
     }
   }
