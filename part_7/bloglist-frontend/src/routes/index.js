@@ -9,6 +9,7 @@ import Blogs from '../pages/Blogs';
 import Blog from '../pages/Blogs/Blog';
 
 import Users from '../pages/Users';
+import User from '../pages/Users/User';
 
 const Routes = () => {
   return (
@@ -20,7 +21,8 @@ const Routes = () => {
       <Route path="/blogs" exact component={Blogs} isPrivate />
       <Route path="/blogs/:id" component={Blog} isPrivate />
 
-      <Route path="/users" component={Users} isPrivate />
+      <Route path="/users" exact component={Users} isPrivate />
+      <Route path="/users/:id" component={User} isPrivate />
     </Switch>
   );
 };
