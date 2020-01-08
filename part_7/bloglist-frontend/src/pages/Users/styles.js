@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   display: flex;
@@ -26,4 +27,16 @@ export const THead = styled.thead`
   }
 `;
 
-export const TBody = styled.tbody``;
+export const TBody = styled.tbody`
+  tr {
+    td {
+      a {
+        font-weight: bold;
+
+        &:hover {
+          color: ${darken(0.1, `#333`)};
+        }
+      }
+    }
+  }
+`;

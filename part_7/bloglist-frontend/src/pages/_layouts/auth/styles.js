@@ -66,6 +66,7 @@ export const Content = styled.div`
       color: ${colors.primary};
       margin-top: 15px;
       font-size: 16px;
+
       &:hover {
         color: ${darken(0.08, `${colors.primary}`)};
       }

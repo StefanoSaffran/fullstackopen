@@ -1,5 +1,6 @@
 export default {
   primary: '#61dbfb',
+  addButton: '#4d85ee',
   white: '#fff',
   border: '#ddd',
   lightBorder: '#eee',
